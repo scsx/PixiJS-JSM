@@ -28,43 +28,55 @@ app.renderer.view.style.position = 'absolute'
 
 document.body.appendChild(app.view)
 
-/* const char1Sprite = PIXI.Sprite.from('./tutorial_assets/images/char1.png')
-app.stage.addChild(char1Sprite) */
-
 // Function to run after rocket's duration
 function explodeRocket(x, y) {
-  let container = new ParticleContainer()
+  /* let container = new ParticleContainer()
 
   for (let i = 0; i < 100; ++i) {
     let sprite = new PIXI.Sprite.fromImage('./assets/rocket.png')
     container.addChild(sprite)
-  }
+  } */
+  console.log(x, y)
 }
 
 // Function to create and manage firework
-function createFirework(type, colour, duration, x, y) {
-  let firework
+function createFirework(type, colour, duration, x, y, velocityX, velocityY) {
   if (type === 'Fountain') {
-    firework = PIXI.Sprite.from('./assets/fountain.png')
+    let fountain
+    fountain = PIXI.Sprite.from('./assets/fountain.png')
+    fountain.tint = parseInt(colour, 16)
+    fountain.position.set(canvasCenter.x - x, canvasCenter.y - y)
+    app.stage.addChild(fountain)
+
+    setTimeout(() => {
+      app.stage.removeChild(fountain)
+    }, duration)
+
   } else if (type === 'Rocket') {
-    firework = PIXI.Sprite.from('./assets/rocket.png')
+    let rocket
+    rocket = PIXI.Sprite.from('./assets/rocket.png')
+    rocket.tint = parseInt(colour, 16)
+    rocket.position.set(canvasCenter.x - x, canvasCenter.y - y)
+    app.stage.addChild(rocket)
+
+    // Animate rocket.
+    app.ticker.add((delta) => loopRocket(delta))
+
+    const loopRocket = (delta) => {
+      // Calculate displacement based on velocity and time (delta)
+      const displacementX = (velocityX * delta) / 1000
+      const displacementY = (velocityY * delta) / 1000
+
+      // Update rocket's position
+      rocket.x += displacementX
+      rocket.y += displacementY * -1
+    }
+
+    setTimeout(() => {
+      app.stage.removeChild(rocket) // Remove rocket from stage
+      explodeRocket(rocket.x, rocket.y) // Call function with last position
+    }, duration)
   }
-
-  firework.tint = parseInt(colour, 16)
-  firework.position.set(canvasCenter.x - x, canvasCenter.y - y)
-  app.stage.addChild(firework)
-
-  // ANIMATE
-  app.ticker.add((delta) => loopChar(delta))
-
-  const loopChar = (delta) => {
-    firework.x += 1
-  }
-
-  // Optionally, animate firework
-  //TweenMax.to(firework, duration / 1000, {
-  /* Animation properties */
-  //})
 }
 
 // Fetch the XML file
@@ -84,12 +96,19 @@ fetch('./data/fireworks.xml')
       const position = firework.getElementsByTagName('Position')[0]
       const x = parseFloat(position.getAttribute('x'))
       const y = parseFloat(position.getAttribute('y'))
+      // Velocity.
+      const velocityElement = firework.getElementsByTagName('Velocity')[0]
+      let velocityX = 0
+      let velocityY = 0
+      if (velocityElement) {
+        velocityX = parseFloat(velocityElement.getAttribute('x'))
+        velocityY = parseFloat(velocityElement.getAttribute('y'))
+      }
 
       // Create and manage firework based on extracted attributes
-
       setTimeout(() => {
-        console.log(beginTime, type, colour, duration, x, y)
-        createFirework(type, colour, duration, x, y)
+        console.log(type, colour, duration, x, y, velocityX, velocityY)
+        createFirework(type, colour, duration, x, y, velocityX, velocityY)
       }, beginTime)
     }
   })
