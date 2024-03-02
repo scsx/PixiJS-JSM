@@ -61,7 +61,7 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
       app.stage.removeChild(fountain)
     }, duration) */
 
-    new ParticleExample(app, ['assets/fountain.png'], fountainConfig, canvasCenter.x - x, canvasCenter.y - y)
+    new ParticleExample(app, ['assets/fountain.png'], fountainConfig, canvasCenter.x - x, canvasCenter.y - y, duration)
 
     // ROCKET
   } else if (type === 'Rocket') {

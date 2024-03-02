@@ -12,13 +12,15 @@
    *  @param {Number} emitterPosY The y position of the emitter
    */
   class ParticleExample {
-    constructor(app, imagePaths, config, emitterPosX, emitterPosY) {
+    constructor(app, imagePaths, config, emitterPosX, emitterPosY, duration) {
       this.app = app
       this.stage = app.stage
       this.emitter = null
       this.bg = null
       this.updateHook = null
       this.containerHook = null
+      this.duration = duration
+      this.destroyTimeout = null
 
       // Calculate the current time
       let elapsed = Date.now()
@@ -48,7 +50,7 @@
 
       // Resize the canvas to the size of the window
       window.onresize = () => {
-       // this.app.renderer.resize(window.innerWidth, window.innerHeight)
+        // this.app.renderer.resize(window.innerWidth, window.innerHeight)
         if (this.bg) {
           // bg is a 1px by 1px image
           this.bg.scale.x = this.app.renderer.width
@@ -56,6 +58,11 @@
         }
       }
       window.onresize()
+
+      // Destroy after duration
+      this.destroyTimeout = setTimeout(() => {
+        this.destroyEmitter()
+      }, this.duration)
 
       // Preload the particle images and create PIXI textures from it
       let urls
@@ -111,15 +118,15 @@
 
         // Start the update
         update()
-
-        // for testing and debugging
-        window.destroyEmitter = () => {
-          this.emitter.destroy()
-          this.emitter = null
-          window.destroyEmitter = null
-          this.app.renderer.render(this.stage)
-        }
       })
+    }
+
+    destroyEmitter() {
+      if (this.emitter) {
+        this.emitter.destroy()
+        this.emitter = null
+        clearTimeout(this.destroyTimeout)
+      }
     }
   }
 
