@@ -7,11 +7,11 @@
    *  @constructor
    *  @param {String[]} imagePaths The local path to the image source
    *  @param {Object} config The emitter configuration
-   *  @param {boolean} [testContainers=false] If changing containers should be enabled.
-   *  @param {boolean} [stepColors=false] If the color settings should be manually stepped.
+   *  @param {Number} emitter pos x
+   *  @param {Number} emitter pos y
    */
   class ParticleExample {
-    constructor(imagePaths, config, stepColors) {
+    constructor(imagePaths, config, posX, posY) {
       const canvas = document.getElementById('stage')
       // Basic PIXI Setup
       const rendererOptions = {
@@ -114,48 +114,11 @@
         this.stage.addChild(emitterContainer)
 
         window.emitter = this.emitter = new PIXI.particles.Emitter(emitterContainer, config)
-        if (stepColors) {
-          // override the initialized list with our auto-stepped one
-          this.emitter
-            .getBehavior('color')
-            .list.reset(
-              PIXI.particles.ParticleUtils.createSteppedGradient(
-                config.behaviors.find((b) => b.type === 'color').config.color.list,
-                stepColors
-              )
-            )
-        }
-
+       
         // Center on the stage
-        this.emitter.updateOwnerPos(window.innerWidth / 2, window.innerHeight / 2)
+        //this.emitter.updateOwnerPos(window.innerWidth / 2, window.innerHeight / 2)
+        this.emitter.updateOwnerPos(posX, posY)
 
-        // Click on the canvas to trigger
-        /* canvas.addEventListener('mouseup', (e) => {
-          if (!this.emitter) return
-
-          // right click (or anything but left click)
-          if (e.button) {
-            if (testContainers) {
-              if (++parentType >= 3) parentType = 0
-              const oldParent = emitterContainer
-              ;[emitterContainer, containerName] = getContainer()
-              if (containerType) containerType.innerHTML = containerName
-              this.stage.addChild(emitterContainer)
-              this.emitter.parent = emitterContainer
-              this.stage.removeChild(oldParent)
-              oldParent.destroy()
-
-              if (this.containerHook) {
-                this.containerHook()
-              }
-            }
-          } else {
-            this.emitter.emit = true
-            this.emitter.resetPositionTracking()
-            this.emitter.updateOwnerPos(e.offsetX || e.layerX, e.offsetY || e.layerY)
-          }
-        })
- */
         // Start the update
         update()
 
