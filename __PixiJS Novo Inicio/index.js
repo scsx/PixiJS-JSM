@@ -7,6 +7,20 @@ const app = new PIXI.Application({
   backgroundColor: 0x000000
 })
 
+let canvasCenter = {
+  x: 640,
+  y: 360
+}
+
+const resizeRenderer = () => {
+  app.renderer.resize(window.innerWidth, window.innerHeight)
+  canvasCenter.x = window.innerWidth / 2
+  canvasCenter.y = window.innerHeight / 2
+}
+
+window.addEventListener('resize', resizeRenderer)
+resizeRenderer()
+
 // Append the PIXI Application's view (canvas) to the document body
 document.body.appendChild(app.view)
 
@@ -29,13 +43,90 @@ const intervalId = setInterval(() => {
 }, 1000)
 */
 
-// Create a Graphics object
-/* const graphics = new PIXI.Graphics()
-graphics.beginFill(0xff0000)
-graphics.lineStyle(2, 0xffffff, 1) // Line style: white, thickness: 2
-graphics.drawRect(50, 50, 200, 100) // Draw a rectangle at (50, 50) with width 200 and height 100
-graphics.endFill()
-app.stage.addChild(graphics) */
+// Explode Rocket  - DELETE AFTER.
+const explodeRocket = (x, y) => {
+  console.log(x, y)
+}
+
+// Function to create and manage firework
+const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
+  // FOUNTAIN.
+  if (type === 'Fountain') {
+    /* let fountain
+    fountain = PIXI.Sprite.from('./assets/fountain.png')
+    fountain.tint = parseInt(colour, 16)
+    fountain.position.set(canvasCenter.x - x, canvasCenter.y - y)
+    app.stage.addChild(fountain) */
+    /* setTimeout(() => {
+      app.stage.removeChild(fountain)
+    }, duration) */
+
+    new ParticleExample(app, ['assets/fountain.png'], fountainConfig, canvasCenter.x - x, canvasCenter.y - y)
+
+    // ROCKET
+  } else if (type === 'Rocket') {
+    let rocket
+    rocket = PIXI.Sprite.from('./assets/rocket.png')
+    rocket.tint = parseInt(colour, 16)
+    rocket.position.set(canvasCenter.x - x, canvasCenter.y - y)
+    app.stage.addChild(rocket)
+
+    // Animate rocket.
+    app.ticker.add((delta) => loopRocket(delta))
+
+    const loopRocket = (delta) => {
+      // Calculate displacement based on velocity and time (delta)
+      const displacementX = (velocityX * delta) / 1000
+      const displacementY = (velocityY * delta) / 1000
+
+      // Update rocket's position
+      rocket.x += displacementX
+      rocket.y += displacementY * -1
+    }
+
+    setTimeout(() => {
+      app.stage.removeChild(rocket) // Remove rocket from stage
+      explodeRocket(rocket.x, rocket.y) // Call function with last position
+    }, duration)
+  }
+}
+
+// Fetch the XML file
+fetch('./data/fireworks.xml')
+  .then((response) => response.text())
+  .then((xmlData) => {
+    const parser = new DOMParser()
+    const xml = parser.parseFromString(xmlData, 'text/xml')
+    const fireworkElements = xml.getElementsByTagName('Firework')
+
+    for (let i = 0; i < fireworkElements.length; i++) {
+      const firework = fireworkElements[i]
+      const beginTime = parseInt(firework.getAttribute('begin'))
+      const type = firework.getAttribute('type')
+      const colour = firework.getAttribute('colour')
+      const duration = parseInt(firework.getAttribute('duration'))
+      const position = firework.getElementsByTagName('Position')[0]
+      const x = parseFloat(position.getAttribute('x'))
+      const y = parseFloat(position.getAttribute('y'))
+      // Velocity.
+      const velocityElement = firework.getElementsByTagName('Velocity')[0]
+      let velocityX = 0
+      let velocityY = 0
+      if (velocityElement) {
+        velocityX = parseFloat(velocityElement.getAttribute('x'))
+        velocityY = parseFloat(velocityElement.getAttribute('y'))
+      }
+
+      // Create and manage firework based on extracted attributes
+      setTimeout(() => {
+        console.log(type, x, y)
+        createFirework(type, colour, duration, x, y, velocityX, velocityY)
+      }, beginTime)
+    }
+  })
+  .catch((error) => {
+    console.error('Error fetching XML file:', error)
+  })
 
 // ATE AQUI
 /*import { fountainConfig, rocketConfig } from './scripts/emitterConfigs.js'

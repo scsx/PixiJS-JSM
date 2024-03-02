@@ -8,8 +8,6 @@ class ParticleExample {
     this.updateHook = null
     this.containerHook = null
 
-    console.log(emitterPosX)
-
     // Calculate the current time
     let elapsed = Date.now()
     let updateId

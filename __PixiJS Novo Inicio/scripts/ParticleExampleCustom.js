@@ -68,7 +68,7 @@
       }
       const loader = PIXI.Loader.shared
       for (let i = 0; i < urls.length; ++i) {
-        loader.add(`img${emitterPosX}-${emitterPosY}` + i, urls[i])
+        loader.add(`img${i}_${Date.now()}` + i, urls[i])
       }
       loader.load(() => {
         this.bg = new PIXI.Sprite(PIXI.Texture.WHITE)
@@ -106,7 +106,7 @@
 
         window.emitter = this.emitter = new PIXI.particles.Emitter(emitterContainer, config)
 
-        // Center on the stage
+        // Pos on the stage
         this.emitter.updateOwnerPos(emitterPosX, emitterPosY)
 
         // Start the update
@@ -117,14 +117,6 @@
           this.emitter.destroy()
           this.emitter = null
           window.destroyEmitter = null
-          // cancelAnimationFrame(updateId);
-
-          // reset SpriteRenderer's batching to fully release particles for GC
-          // if (this.app.renderer.plugins && this.app.renderer.plugins.sprite && this.app.renderer.plugins.sprite.sprites)
-          // {
-          //     this.app.renderer.plugins.sprite.sprites.length = 0;
-          // }
-
           this.app.renderer.render(this.stage)
         }
       })

@@ -13,7 +13,7 @@ const app = new Application({
 
 let canvasCenter = {
   x: 640,
-  y: 350
+  y: 360
 }
 
 const resizeRenderer = () => {
