@@ -5,24 +5,17 @@
    *  Basic example setup
    *  @class ParticleExample
    *  @constructor
+   *  @param {PIXI.Application} app The PIXI Application instance
    *  @param {String[]} imagePaths The local path to the image source
    *  @param {Object} config The emitter configuration
-   *  @param {Number} emitter pos x
-   *  @param {Number} emitter pos y
+   *  @param {Number} emitterPosX The x position of the emitter
+   *  @param {Number} emitterPosY The y position of the emitter
    */
   class ParticleExample {
-    constructor(imagePaths, config, posX, posY) {
-      const canvas = document.getElementById('stage')
-      // Basic PIXI Setup
-      const rendererOptions = {
-        width: canvas.width,
-        height: canvas.height,
-        view: canvas
-      }
-
-      this.stage = new PIXI.Container()
+    constructor(app, imagePaths, config, emitterPosX, emitterPosY) {
+      this.app = app
+      this.stage = app.stage
       this.emitter = null
-      this.renderer = new PIXI.Renderer(rendererOptions)
       this.bg = null
       this.updateHook = null
       this.containerHook = null
@@ -50,18 +43,16 @@
         elapsed = now
 
         // render the stage
-        this.renderer.render(this.stage)
+        this.app.renderer.render(this.stage)
       }
 
       // Resize the canvas to the size of the window
       window.onresize = () => {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        this.renderer.resize(canvas.width, canvas.height)
+       // this.app.renderer.resize(window.innerWidth, window.innerHeight)
         if (this.bg) {
           // bg is a 1px by 1px image
-          this.bg.scale.x = canvas.width
-          this.bg.scale.y = canvas.height
+          this.bg.scale.x = this.app.renderer.width
+          this.bg.scale.y = this.app.renderer.height
         }
       }
       window.onresize()
@@ -82,8 +73,8 @@
       loader.load(() => {
         this.bg = new PIXI.Sprite(PIXI.Texture.WHITE)
         // bg is a 1px by 1px image
-        this.bg.scale.x = canvas.width
-        this.bg.scale.y = canvas.height
+        /* this.bg.scale.x = this.app.renderer.width
+        this.bg.scale.y = this.app.renderer.height */
         this.bg.tint = 0x000000
         this.stage.addChild(this.bg)
         // Create the new emitter and attach it to the stage
@@ -114,10 +105,9 @@
         this.stage.addChild(emitterContainer)
 
         window.emitter = this.emitter = new PIXI.particles.Emitter(emitterContainer, config)
-       
+
         // Center on the stage
-        //this.emitter.updateOwnerPos(window.innerWidth / 2, window.innerHeight / 2)
-        this.emitter.updateOwnerPos(posX, posY)
+        this.emitter.updateOwnerPos(emitterPosX, emitterPosY)
 
         // Start the update
         update()
@@ -130,12 +120,12 @@
           // cancelAnimationFrame(updateId);
 
           // reset SpriteRenderer's batching to fully release particles for GC
-          // if (this.renderer.plugins && this.renderer.plugins.sprite && this.renderer.plugins.sprite.sprites)
+          // if (this.app.renderer.plugins && this.app.renderer.plugins.sprite && this.app.renderer.plugins.sprite.sprites)
           // {
-          //     this.renderer.plugins.sprite.sprites.length = 0;
+          //     this.app.renderer.plugins.sprite.sprites.length = 0;
           // }
 
-          this.renderer.render(this.stage)
+          this.app.renderer.render(this.stage)
         }
       })
     }
