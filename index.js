@@ -1,3 +1,5 @@
+//import * as particles from './node_modules/@pixi/particle-emitter'
+
 // START
 const Application = PIXI.Application
 const Graphics = PIXI.Graphics
@@ -29,18 +31,13 @@ app.renderer.view.style.position = 'absolute'
 document.body.appendChild(app.view)
 
 // Function to run after rocket's duration
-function explodeRocket(x, y) {
-  /* let container = new ParticleContainer()
-
-  for (let i = 0; i < 100; ++i) {
-    let sprite = new PIXI.Sprite.fromImage('./assets/rocket.png')
-    container.addChild(sprite)
-  } */
+const explodeRocket = (x, y) => {
   console.log(x, y)
 }
 
 // Function to create and manage firework
-function createFirework(type, colour, duration, x, y, velocityX, velocityY) {
+const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
+  // FOUNTAIN.
   if (type === 'Fountain') {
     let fountain
     fountain = PIXI.Sprite.from('./assets/fountain.png')
@@ -48,10 +45,136 @@ function createFirework(type, colour, duration, x, y, velocityX, velocityY) {
     fountain.position.set(canvasCenter.x - x, canvasCenter.y - y)
     app.stage.addChild(fountain)
 
+    // EMITTER.
+    // Create Particle Textures
+    const particleTexture = PIXI.Texture.from('./assets/fountain.png')
+
+    // Configure Particle Emitter
+    const emitter = new PIXI.particles.Emitter(app.stage, {
+      frequency: 0.001,
+      lifetime: {
+        min: 0.5,
+        max: 0.5
+      },
+      emitterLifetime: 0,
+      maxParticles: 1000,
+      addAtBack: false,
+      /* pos: {
+        x: 0,
+        y: 0
+      }, */
+      pos: {
+        x: x,
+        y: y
+      },
+      behaviors: [
+        {
+          type: 'alpha',
+          config: {
+            alpha: {
+              list: [
+                {
+                  time: 0,
+                  value: 1
+                },
+                {
+                  time: 1,
+                  value: 0.31
+                }
+              ]
+            }
+          }
+        },
+        {
+          type: 'moveAcceleration',
+          config: {
+            accel: {
+              x: 0,
+              y: 2000
+            },
+            minStart: 600,
+            maxStart: 600,
+            rotate: true
+          }
+        },
+        {
+          type: 'scale',
+          config: {
+            scale: {
+              list: [
+                {
+                  time: 0,
+                  value: 0.5
+                },
+                {
+                  time: 1,
+                  value: 1
+                }
+              ]
+            },
+            minMult: 1
+          }
+        },
+        {
+          type: 'color',
+          config: {
+            color: {
+              list: [
+                {
+                  time: 0,
+                  value: 'ffffff'
+                },
+                {
+                  time: 1,
+                  value: '9ff3ff'
+                }
+              ]
+            }
+          }
+        },
+        {
+          type: 'rotationStatic',
+          config: {
+            min: 260,
+            max: 280
+          }
+        },
+        /* {
+          type: 'textureRandom',
+          config: {
+            textures: ['images/Sparks.png']
+          }
+        }, */
+        { type: 'textureSingle', config: { texture: PIXI.Texture.WHITE } },
+        {
+          type: 'spawnShape',
+          config: {
+            type: 'torus',
+            data: {
+              x: 0,
+              y: 0,
+              radius: 0,
+              innerRadius: 0,
+              affectRotation: false
+            }
+          }
+        }
+      ]
+    })
+
+    // Start emitting particles
+    emitter.emit = true
+
+    // Animate Particles
+    app.ticker.add((delta) => {
+      emitter.update(delta * 0.001) // Convert delta to seconds
+    })
+
     setTimeout(() => {
       app.stage.removeChild(fountain)
     }, duration)
 
+    // ROCKET
   } else if (type === 'Rocket') {
     let rocket
     rocket = PIXI.Sprite.from('./assets/rocket.png')

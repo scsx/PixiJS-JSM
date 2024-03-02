@@ -1,0 +1,52 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Hello World</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.0.4/pixi.min.js"
+      integrity="sha512-UQMlkbatDPsiH7tXKzfeZaPbR/TB1ThUOD6cjqmWPyKhdBl5jHiCVpSrfl+8n3KfEDhnhPhA+/8joiYpTHeC6w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"></script>
+    <script src="./pixiparticles.com/particle-emitter.js"></script>
+  </head>
+
+  <body>
+    <canvas id="canvas"></canvas>
+  </body>
+
+  <script>
+    const { Container, ParticleContainer, Renderer, Ticker } = PIXI
+    const canvas = document.getElementById('canvas')
+    const renderer = new Renderer({
+      view: canvas,
+      width: 600,
+      height: 400
+    })
+    const stage = new Container()
+    const cnt = new ParticleContainer()
+    stage.addChild(cnt)
+    const ticker = new Ticker()
+    let elapsed = 0
+    ticker.add(() => renderer.render(stage))
+    ticker.start()
+
+    const emitter = new PIXI.particles.Emitter(cnt, {
+      lifetime: { min: 0.1, max: 3 },
+      frequency: 1,
+      spawnChance: 1,
+      particlesPerWave: 1,
+      emitterLifetime: 120,
+      maxParticles: 10,
+      pos: { x: 327, y: 200 },
+      autoUpdate: true,
+      behaviors: [
+        {
+          type: 'spawnShape',
+          config: { type: 'torus', data: { x: 0, y: 0, radius: 100 } }
+        },
+        { type: 'textureSingle', config: { texture: PIXI.Texture.WHITE } }
+      ]
+    })
+  </script>
+</html>
