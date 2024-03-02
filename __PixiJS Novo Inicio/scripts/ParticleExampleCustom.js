@@ -68,7 +68,7 @@
       }
       const loader = PIXI.Loader.shared
       for (let i = 0; i < urls.length; ++i) {
-        loader.add('img' + i, urls[i])
+        loader.add(`img${emitterPosX}-${emitterPosY}` + i, urls[i])
       }
       loader.load(() => {
         this.bg = new PIXI.Sprite(PIXI.Texture.WHITE)
