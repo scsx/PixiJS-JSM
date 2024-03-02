@@ -11,7 +11,7 @@
    *  @param {boolean} [stepColors=false] If the color settings should be manually stepped.
    */
   class ParticleExample {
-    constructor(imagePaths, config, testContainers, stepColors) {
+    constructor(imagePaths, config, stepColors) {
       const canvas = document.getElementById('stage')
       // Basic PIXI Setup
       const rendererOptions = {
@@ -19,17 +19,13 @@
         height: canvas.height,
         view: canvas
       }
-      /* var preMultAlpha = !!options.preMultAlpha;
-            if(rendererOptions.transparent && !preMultAlpha)
-                rendererOptions.transparent = 'notMultiplied';*/
+
       this.stage = new PIXI.Container()
       this.emitter = null
       this.renderer = new PIXI.Renderer(rendererOptions)
       this.bg = null
       this.updateHook = null
       this.containerHook = null
-
-      const containerType = document.getElementById('containerType')
 
       // Calculate the current time
       let elapsed = Date.now()
@@ -116,7 +112,6 @@
         }
         let [emitterContainer, containerName] = getContainer()
         this.stage.addChild(emitterContainer)
-        if (containerType) containerType.innerHTML = containerName
 
         window.emitter = this.emitter = new PIXI.particles.Emitter(emitterContainer, config)
         if (stepColors) {
