@@ -104,10 +104,3 @@ export const fountainConfig = {
     }
   ]
 }
-
-export const rocketConfig = {
-  lifetime: {
-    min: 0.25,
-    max: 1
-  }
-}

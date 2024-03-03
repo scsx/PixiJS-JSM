@@ -1,4 +1,4 @@
-import { fountainConfig, rocketConfig } from './scripts/emitterConfigs.js'
+import { fountainConfig } from './scripts/emitterConfigs.js'
 
 // Create a PIXI Application
 const app = new PIXI.Application({
@@ -27,46 +27,29 @@ document.body.appendChild(app.view)
 // Example call
 //new ParticleExample(app, ['assets/fountain.png'], fountainConfig, 300, 300)
 
-// Call Multiple
-/*
-function myFunction(x, y) {
-  new ParticleExample(app, ['assets/fountain.png'], fountainConfig, x, y)
-}
-
-let counter = 1;
-const intervalId = setInterval(() => {
-  myFunction(100 * counter, 500);
-  counter++;
-  if (counter === 6) {
-    clearInterval(intervalId); // Stop the interval after three executions
-  }
-}, 1000)
-*/
-
-// Explode Rocket  - DELETE AFTER.
 const explodeRocket = (x, y) => {
   console.log(x, y)
 }
+
+
 
 // Function to create and manage firework
 const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
   // FOUNTAIN.
   if (type === 'Fountain') {
-    /* let fountain
-    fountain = PIXI.Sprite.from('./assets/fountain.png')
-    fountain.tint = parseInt(colour, 16)
-    fountain.position.set(canvasCenter.x - x, canvasCenter.y - y)
-    app.stage.addChild(fountain) */
-    /* setTimeout(() => {
-      app.stage.removeChild(fountain)
-    }, duration) */
-
-    new ParticleExample(app, ['assets/fountain.png'], fountainConfig, canvasCenter.x - x, canvasCenter.y - y, duration)
+    new ParticleExample(
+      app,
+      ['assets/fountain.png'],
+      fountainConfig,
+      canvasCenter.x - x,
+      canvasCenter.y - y,
+      duration
+    )
 
     // ROCKET
   } else if (type === 'Rocket') {
     let rocket
-    rocket = PIXI.Sprite.from('./assets/rocket.png')
+    rocket = PIXI.Sprite.from('./assets/particle.png')
     rocket.tint = parseInt(colour, 16)
     rocket.position.set(canvasCenter.x - x, canvasCenter.y - y)
     app.stage.addChild(rocket)
@@ -86,6 +69,7 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
 
     setTimeout(() => {
       app.stage.removeChild(rocket) // Remove rocket from stage
+      //new ParticleExample(app, ['assets/rocket.png'], rocketConfig, rocket.x, rocket.y, 1500)
       explodeRocket(rocket.x, rocket.y) // Call function with last position
     }, duration)
   }
