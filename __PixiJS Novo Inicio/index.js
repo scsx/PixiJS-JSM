@@ -1,4 +1,5 @@
 import { fountainConfig } from './scripts/emitterConfigs.js'
+import { explodeRocket } from './scripts/explodeRocket.js'
 
 // Create a PIXI Application
 const app = new PIXI.Application({
@@ -26,11 +27,6 @@ document.body.appendChild(app.view)
 
 // Example call
 //new ParticleExample(app, ['assets/fountain.png'], fountainConfig, 300, 300)
-
-const explodeRocket = (x, y) => {
-  console.log(x, y)
-}
-
 
 
 // Function to create and manage firework
@@ -70,7 +66,7 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
     setTimeout(() => {
       app.stage.removeChild(rocket)
       //new ParticleExample(app, ['assets/rocket.png'], rocketConfig, rocket.x, rocket.y, 1500)
-      explodeRocket(rocket.x, rocket.y) // Call function with last position
+      explodeRocket(app, rocket.x, rocket.y, colour) // Call function with last position
     }, duration)
   }
 }
