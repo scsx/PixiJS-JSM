@@ -9,25 +9,24 @@ const app = new PIXI.Application({
 })
 
 let canvasCenter = {
-  x: 640,
-  y: 360
+  x: app.renderer.width / 2,
+  y: app.renderer.height / 2
 }
 
-const resizeRenderer = () => {
+/* const resizeRenderer = () => {
   app.renderer.resize(window.innerWidth, window.innerHeight)
   canvasCenter.x = window.innerWidth / 2
   canvasCenter.y = window.innerHeight / 2
 }
 
 window.addEventListener('resize', resizeRenderer)
-resizeRenderer()
+resizeRenderer() */
 
 // Append the PIXI Application's view (canvas) to the document body
 document.body.appendChild(app.view)
 
 // Example call
 //new ParticleExample(app, ['assets/fountain.png'], fountainConfig, 300, 300)
-
 
 // Function to create and manage firework
 const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
@@ -41,6 +40,8 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
       canvasCenter.y - y,
       duration
     )
+
+    console.log(canvasCenter.x)
 
     // ROCKET
   } else if (type === 'Rocket') {
@@ -99,7 +100,6 @@ fetch('./data/fireworks.xml')
 
       // Create and manage firework based on extracted attributes
       setTimeout(() => {
-        console.log(type, x, y)
         createFirework(type, colour, duration, x, y, velocityX, velocityY)
       }, beginTime)
     }

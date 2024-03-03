@@ -1,5 +1,5 @@
 export const explodeRocket = (app, x, y, colour) => {
-  const explosionSize = 50 // Number of particles in the explosion
+  const explosionSize = 150 // Number of particles in the explosion
   const explosionSpeed = 5 // Maximum speed of particles in pixels per frame
   const particleTexture = PIXI.Texture.from('assets/rocket.png') // Texture for the particles
   let explosionLife = 60 // Duration of the explosion in frames

@@ -22,9 +22,7 @@
                 height: canvas.height,
                 view: canvas,
             };
-            /* var preMultAlpha = !!options.preMultAlpha;
-            if(rendererOptions.transparent && !preMultAlpha)
-                rendererOptions.transparent = 'notMultiplied';*/
+            
             this.stage = new PIXI.Container();
             this.emitter = null;
             this.renderer = new PIXI.Renderer(rendererOptions);
@@ -208,13 +206,6 @@
                     this.emitter.destroy();
                     this.emitter = null;
                     window.destroyEmitter = null;
-                    // cancelAnimationFrame(updateId);
-
-                    // reset SpriteRenderer's batching to fully release particles for GC
-                    // if (this.renderer.plugins && this.renderer.plugins.sprite && this.renderer.plugins.sprite.sprites)
-                    // {
-                    //     this.renderer.plugins.sprite.sprites.length = 0;
-                    // }
 
                     this.renderer.render(this.stage);
                 };

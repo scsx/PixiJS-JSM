@@ -48,11 +48,11 @@ export const fountainConfig = {
           list: [
             {
               time: 0,
-              value: 0.5
+              value: 1
             },
             {
               time: 1,
-              value: 1
+              value: 2
             }
           ]
         },
