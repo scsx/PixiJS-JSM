@@ -47,7 +47,7 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
     const loopRocket = (delta) => {
       // Calculate displacement based on velocity and time (delta)
       const displacementX = (velocityX * delta) / 1000
-      const displacementY = (velocityY * delta) / 1000
+      const displacementY = (velocityY * delta) / 100 // Should be 1000 but rockets were exploding right at the beggining.
 
       // Update rocket's position
       rocket.x += displacementX
@@ -56,7 +56,6 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
 
     setTimeout(() => {
       app.stage.removeChild(rocket)
-      //new ParticleExample(app, ['assets/rocket.png'], rocketConfig, rocket.x, rocket.y, 1500)
       explodeRocket(app, rocket.x, rocket.y, colour) // Call function with last position
     }, duration)
   }
