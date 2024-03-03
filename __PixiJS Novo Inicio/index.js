@@ -13,16 +13,6 @@ let canvasCenter = {
   y: app.renderer.height / 2
 }
 
-/* const resizeRenderer = () => {
-  app.renderer.resize(window.innerWidth, window.innerHeight)
-  canvasCenter.x = window.innerWidth / 2
-  canvasCenter.y = window.innerHeight / 2
-}
-
-window.addEventListener('resize', resizeRenderer)
-resizeRenderer() */
-
-// Append the PIXI Application's view (canvas) to the document body
 document.body.appendChild(app.view)
 
 // Example call
@@ -32,6 +22,8 @@ document.body.appendChild(app.view)
 const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
   // FOUNTAIN.
   if (type === 'Fountain') {
+    fountainConfig.behaviors[3].config.color.list[1].value = colour
+
     new ParticleExample(
       app,
       ['assets/fountain.png'],
@@ -40,8 +32,6 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
       canvasCenter.y - y,
       duration
     )
-
-    console.log(canvasCenter.x)
 
     // ROCKET
   } else if (type === 'Rocket') {
@@ -89,7 +79,6 @@ fetch('./data/fireworks.xml')
       const position = firework.getElementsByTagName('Position')[0]
       const x = parseFloat(position.getAttribute('x'))
       const y = parseFloat(position.getAttribute('y'))
-      // Velocity.
       const velocityElement = firework.getElementsByTagName('Velocity')[0]
       let velocityX = 0
       let velocityY = 0
@@ -98,7 +87,7 @@ fetch('./data/fireworks.xml')
         velocityY = parseFloat(velocityElement.getAttribute('y'))
       }
 
-      // Create and manage firework based on extracted attributes
+      // Create firework based on extracted attributes
       setTimeout(() => {
         createFirework(type, colour, duration, x, y, velocityX, velocityY)
       }, beginTime)
@@ -107,51 +96,3 @@ fetch('./data/fireworks.xml')
   .catch((error) => {
     console.error('Error fetching XML file:', error)
   })
-
-// ATE AQUI
-/*import { fountainConfig, rocketConfig } from './scripts/emitterConfigs.js'
-
-const canvas = document.getElementById('stage')
-
-// START
-const Application = PIXI.Application
-const Graphics = PIXI.Graphics
-
-const app = new Application({
-  width: 1280,
-  height: 720,
-  antialias: true,
-  backgroundAlpha: 1,
-  backgroundColor: 0x000000
-})
-
-app.renderer.view = canvas
-
-
-let canvasCenter = {
-  x: 640,
-  y: 350
-}
-
-const resizeRenderer = () => {
-  app.renderer.resize(window.innerWidth, window.innerHeight)
-  canvasCenter.x = window.innerWidth / 2
-  canvasCenter.y = window.innerHeight / 2
-}
-
-window.addEventListener('resize', resizeRenderer)
-resizeRenderer()
-
-app.renderer.view.style.position = 'absolute'
-
-//document.body.appendChild(app.view)
-const rectangle = new Graphics()
-rectangle.beginFill(0xaa33bb)
-rectangle.lineStyle(4, 0xff33bb, 1)
-rectangle.drawRect(200, 200, 100, 120)
-rectangle.endFill()
-app.stage.addChild(rectangle)
-
-// See js/ParticleExample.js for actual setup.
-//new ParticleExample(app, ['assets/fountain.png'], fountainConfig, 300, 300)
-*/

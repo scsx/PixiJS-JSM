@@ -34,10 +34,10 @@ export const fountainConfig = {
       config: {
         accel: {
           x: 0,
-          y: 2000
+          y: 1000
         },
-        minStart: 600,
-        maxStart: 600,
+        minStart: 700,
+        maxStart: 700,
         rotate: true
       }
     },
