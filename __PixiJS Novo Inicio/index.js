@@ -68,7 +68,7 @@ const createFirework = (type, colour, duration, x, y, velocityX, velocityY) => {
     }
 
     setTimeout(() => {
-      app.stage.removeChild(rocket) // Remove rocket from stage
+      app.stage.removeChild(rocket)
       //new ParticleExample(app, ['assets/rocket.png'], rocketConfig, rocket.x, rocket.y, 1500)
       explodeRocket(rocket.x, rocket.y) // Call function with last position
     }, duration)
