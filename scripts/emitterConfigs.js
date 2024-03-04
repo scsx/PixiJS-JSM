@@ -1,3 +1,4 @@
+// Based on https://github.com/pixijs/particle-emitter/blob/master/docs/examples/fountain.html
 export const fountainConfig = {
   lifetime: {
     min: 0.25,

@@ -1,8 +1,8 @@
 export const explodeRocket = (app, x, y, colour) => {
-  const explosionSize = 150 // Number of particles in the explosion
-  const explosionSpeed = 5 // Maximum speed of particles in pixels per frame
-  const particleTexture = PIXI.Texture.from('assets/rocket.png') // Texture for the particles
-  let explosionLife = 60 // Duration of the explosion in frames
+  const explosionSize = 500 // Number of particles in the explosion
+  const explosionSpeed = 7 // Maximum speed of particles in pixels per frame
+  let explosionLife = 200 // Duration of the explosion in frames
+  const particleTexture = PIXI.Texture.from('assets/rocket.png')
 
   // Create an array to store the explosion particles
   const particles = []
@@ -13,6 +13,8 @@ export const explodeRocket = (app, x, y, colour) => {
     const particle = new PIXI.Sprite(particleTexture)
     particle.tint = colour
     particle.anchor.set(0.5)
+    particle.scale.x = 0.5
+    particle.scale.y = 0.5
 
     // Randomize particle position
     particle.x = x
@@ -37,9 +39,9 @@ export const explodeRocket = (app, x, y, colour) => {
     particles.forEach((particle) => {
       particle.x += particle.vx
       particle.y += particle.vy
-      particle.scale.x *= 0.99
-      particle.scale.y *= 0.99
-      particle.alpha *= 0.95
+      particle.scale.x *= 0.95
+      particle.scale.y *= 0.95
+      //particle.alpha *= 0.99
     })
 
     // Decrease the life of the explosion
